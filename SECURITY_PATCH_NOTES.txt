@@ -1,0 +1,13 @@
+Bankism security patch v2
+=========================
+Fixes benchmark fixture mismatch for FIN-04.
+
+The firewall intentionally ignores a caller-supplied account balance because
+client-provided financial state is untrusted. The benchmark previously passed
+account_balance through account_context and expected the engine to trust it,
+so FIN-04 was testing the wrong setup. The benchmark now seeds the synthetic
+server-side demo balance through a test-only fixture hook before each case.
+
+The fixture hook requires BANKISM_ALLOW_TEST_FIXTURES=true and refuses to run
+when NODE_ENV=production. This remains a demo-only in-memory ledger; use a
+durable database transaction and server-side authentication before production.

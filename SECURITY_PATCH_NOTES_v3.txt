@@ -1,0 +1,13 @@
+Bankism security patch v3 — malicious transaction authorization regression
+
+Fix:
+- Added a deterministic Layer 1 policy-override signature for direct requests to disable the firewall/security controls, and for requests to bypass/skip confirmation.
+- Added REG-UI-01 to test_engine.mjs using the exact prompt reproduced in the local UI screenshot.
+- Regression requires BLOCKED, transaction_authorized=false, execution_status=NOT_EXECUTED, and no confirmation token.
+
+Run:
+  npm ci
+  npm run test:firewall
+  npm run build
+
+Expected: existing 30 benchmark assertions pass and REG-UI-01 prints PASS. This patch is not a substitute for broader testing; test the UI again after installing it. No production banking API is involved; ledger remains synthetic/in-memory.

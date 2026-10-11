@@ -1,0 +1,15 @@
+Bankism security patch v4 — fix REG-UI-01 false negative
+
+Root cause:
+1. OVERRIDE_01 did not allow the phrase structure "previous security rules"; it expected "previous rules" or "security rules".
+2. OVERRIDE_04's regular expression contained double-escaped \b and \s sequences inside a regex literal, so it looked for literal backslashes rather than word boundaries/whitespace.
+
+Fix:
+- OVERRIDE_01 now recognizes an optional "security" between "previous" and "rules/instructions".
+- OVERRIDE_04 uses proper regex escapes and catches "disable the firewall", "do not ask for confirmation", and related variants.
+- The existing REG-UI-01 regression test remains and asserts BLOCKED, transaction_authorized=false, NOT_EXECUTED, and no confirmation token.
+
+Validation:
+- Source-level fix applied; full npm test/build validation was not run in this packaging environment.
+- Run npm ci, npm run test:firewall, and npm run build in Windows PowerShell.
+- Keep the existing synthetic/in-memory ledger; this is not production banking software.
